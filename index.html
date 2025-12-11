@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Aya Ultra Secure</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{
+  background:#000;
+  min-height:100vh;color:white;overflow-x:hidden;
+  -webkit-user-select:none;user-select:none;
+  position:relative;scroll-behavior:smooth;
+}
+
+/* خلفية متحركة خفيفة */
+body::before{
+  content:"";position:fixed;inset:0;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(0,255,255,0.05), transparent 60%),
+    radial-gradient(circle at 70% 70%, rgba(255,0,255,0.05), transparent 60%),
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02), transparent 70%);
+  animation: glowBg 25s infinite alternate;
+  z-index:-1;
+}
+@keyframes glowBg{
+  0% { transform: translate(0px,0px) scale(1); filter: blur(12px);}
+  50% { transform: translate(20px,-20px) scale(1.05); filter: blur(18px);}
+  100% { transform: translate(-20px,20px) scale(1); filter: blur(12px);}
+}
+
+/* شاشة القفل Login */
+#lock{
+  position:fixed;inset:0;display:flex;
+  justify-content:center;align-items:center;
+  background:rgba(0,0,0,.8);backdrop-filter:blur(15px);
+  transition: opacity 0.5s ease;
+}
+.lockBox{
+  background:rgba(255,255,255,.05);
+  padding:40px;border-radius:25px;
+  width:90%;max-width:380px;
+  text-align:center;box-shadow:0 0 45px rgba(0,255,255,.3);
+}
+.lockBox h2{
+  margin-bottom:25px;
+  color:#0ff;
+  font-size:26px;
+  text-shadow:0 0 10px #0ff,0 0 20px #f0f;
+}
+.lockBox input{
+  width:100%;padding:15px;border-radius:15px;
+  border:none;outline:none;margin-bottom:25px;text-align:center;
+  background:rgba(0,0,0,0.35);color:white;font-size:16px;
+  box-shadow: inset 0 0 10px rgba(0,255,255,0.2);
+}
+.lockBox input:focus{
+  box-shadow: 0 0 15px cyan,0 0 25px magenta;
+}
+.lockBox button{
+  width:100%;padding:15px;border:none;
+  border-radius:15px;background:linear-gradient(45deg,cyan,fuchsia);
+  color:black;font-weight:bold;font-size:16px;
+  cursor:pointer;transition:.3s, box-shadow .3s;
+  box-shadow:0 0 12px cyan,0 0 25px magenta;
+}
+.lockBox button:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 25px cyan,0 0 50px magenta;
+}
+
+/* Panel */
+#panel{display:none;padding:20px;animation:fade 1s ease;}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* Panel Header مع RGB متحرك */
+.panel-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:15px 25px;border-radius:25px;
+  animation: rgbBorder 6s linear infinite;
+  border: 4px solid transparent;
+  background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, magenta, red);
+  background-size: 400% 400%;
+}
+@keyframes rgbBorder{
+  0%{ background-position:0% 50%; }
+  50%{ background-position:100% 50%; }
+  100%{ background-position:0% 50%; }
+}
+
+/* أيقونات Instagram مع RGB Glow */
+.social-link img{
+  width:60px;height:60px;border-radius:20px;
+  cursor:pointer;animation: rgbIcon 4s linear infinite;box-shadow:0 0 15px #fff;
+  transition: transform .3s;
+}
+.social-link:active img{
+  transform: scale(1.3) rotate(15deg);
+}
+@keyframes rgbIcon{
+  0%{ box-shadow:0 0 10px red,0 0 20px orange,0 0 30px yellow;}
+  16%{ box-shadow:0 0 10px yellow,0 0 20px green,0 0 30px cyan;}
+  33%{ box-shadow:0 0 10px cyan,0 0 20px blue,0 0 30px magenta;}
+  50%{ box-shadow:0 0 10px magenta,0 0 20px red,0 0 30px orange;}
+  66%{ box-shadow:0 0 10px orange,0 0 20px yellow,0 0 30px green;}
+  83%{ box-shadow:0 0 10px green,0 0 20px cyan,0 0 30px blue;}
+  100%{ box-shadow:0 0 10px red,0 0 20px orange,0 0 30px yellow;}
+}
+
+/* عنوان اللوحة */
+.panel-title{
+  font-size:26px;font-weight:bold;color:white;
+  text-shadow:0 0 12px #fff;
+}
+
+/* رسالة الترحيب */
+.message{
+  margin-top:20px;background:rgba(255,255,255,.07);
+  padding:25px;border-radius:22px;
+  line-height:1.8;font-size:18px;
+  box-shadow:0 0 25px rgba(0,255,255,.2);
+  text-align:center;
+}
+
+/* معرض الصور stacked */
+.gallery{
+  display:flex;flex-direction:column;gap:25px;margin-top:25px;
+}
+.card{
+  background:rgba(255,255,255,.05);
+  border-radius:25px;overflow:hidden;
+  box-shadow:0 6px 30px rgba(0,255,255,.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover{
+  transform:translateY(-12px) scale(1.05);
+  box-shadow:0 0 55px cyan,0 0 80px magenta;
+}
+.card img{
+  width:100%;height:220px;object-fit:cover;
+  transition:.3s;cursor:pointer;
+}
+.card img:active {
+  animation: spinGlow 0.6s ease-in-out;
+  box-shadow:0 0 35px cyan,0 0 70px magenta,0 0 100px #0ff;
+}
+@keyframes spinGlow{
+  0%{ transform: scale(0.95) rotate(0deg); filter: brightness(1);}
+  50%{ transform: scale(1.05) rotate(180deg); filter: brightness(1.5);}
+  100%{ transform: scale(1) rotate(360deg); filter: brightness(1);}
+}
+.card input{
+  width:100%;padding:10px;border:none;outline:none;
+  background:#000;color:white;text-align:center;font-size:12px;
+}
+
+/* تكبير الصور */
+#zoomBox{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,.9);display:none;
+  justify-content:center;align-items:center;z-index:9999;
+}
+#zoomBox img{
+  max-width:90%;max-height:90%;border-radius:25px;
+  box-shadow:0 0 55px cyan;animation:zoomIn .3s;
+}
+@keyframes zoomIn{from{transform:scale(.4)}to{transform:scale(1)}}
+
+.footer{
+  margin-top:30px;text-align:center;
+  opacity:.5;font-size:13px
+}
+.counter{
+  margin-top:15px;text-align:center;font-size:14px;opacity:.7
+}
+</style>
+</head>
+<body>
+
+<!-- موسيقى -->
+<audio id="bgm" autoplay loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/10/30/audio_1b8a594f4c.mp3" type="audio/mpeg">
+</audio>
+
+<!-- شاشة القفل -->
+<div id="lock">
+<div class="lockBox">
+<h2>🔐 Aya Ultra Secure</h2>
+<input type="password" id="p" placeholder="كلمة السر">
+<button onclick="_0x1a()">دخول</button>
+</div>
+</div>
+
+<!-- Zoom -->
+<div id="zoomBox" onclick="this.style.display='none'">
+<img src="">
+</div>
+
+<!-- Panel -->
+<div id="panel">
+<div class="panel-header">
+  <a href="https://www.instagram.com/rayen.zouari.750" target="_blank" class="social-link">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Owner Instagram">
+  </a>
+  <div class="panel-title">Aya Art</div>
+  <a href="https://www.instagram.com/aya_mt_00" target="_blank" class="social-link">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Artist Instagram">
+  </a>
+</div>
+
+<div class="message">
+إلى آية 🤍  
+هذا الموقع هو مساحة خاصة لإبداعك، صُنع لك بحب وفخر.  
+كل لوحة ترسمينها تحمل روحك الجميلة 🌸  
+<br><br>
+— أخوك الذي يؤمن بموهبتك —
+</div>
+
+<h3 style="text-align:center;margin-top:25px">🎨 معرض الأعمال</h3>
+<div class="gallery">
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/380478289.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/380478289.jpg" oninput="_0ximg(this)"></div>
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/151738273.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/151738273.jpg" oninput="_0ximg(this)"></div>
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/689393679.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/689393679.jpg" oninput="_0ximg(this)"></div>
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/215508705.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/215508705.jpg" oninput="_0ximg(this)"></div>
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/629302949.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/629302949.jpg" oninput="_0ximg(this)"></div>
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/655631693.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/655631693.jpg" oninput="_0ximg(this)"></div>
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/403232606.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/403232606.jpg" oninput="_0ximg(this)"></div>
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/674037434.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/674037434.jpg" oninput="_0ximg(this)"></div>
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/607202806.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/607202806.jpg" oninput="_0ximg(this)"></div>
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/463898494.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/463898494.jpg" oninput="_0ximg(this)"></div>
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/912202606.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/912202606.jpg" oninput="_0ximg(this)"></div>
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/848604188.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/848604188.jpg" oninput="_0ximg(this)"></div>
+<div class="card"><img src="https://www2.0zz0.com/2025/12/11/01/814817873.jpg" onclick="zoom(this)"><input placeholder="https://www2.0zz0.com/2025/12/11/01/814817873.jpg" oninput="_0ximg(this)"></div>
+</div>
+
+<div class="counter">عدد الزيارات: <span id="visits"></span></div>
+<div class="footer">© 2025 Aya Art | Ultra Secure Edition</div>
+</div>
+
+<script>
+const _0xpass="aya art";
+
+/* حماية الاختصارات */
+document.addEventListener("contextmenu",e=>e.preventDefault());
+document.addEventListener("keydown",e=>{
+  if(e.key=="F12"|| (e.ctrlKey && e.shiftKey && e.key=="I") || (e.ctrlKey && e.key=="U")){
+    e.preventDefault();
+  }
+});
+
+/* عداد الزيارات */
+let v=localStorage.getItem("aya_visits");
+v=v?parseInt(v)+1:1;
+localStorage.setItem("aya_visits",v);
+document.getElementById("visits").textContent=v;
+
+/* تسجيل الدخول */
+function _0x1a(){
+  let val=document.getElementById("p").value;
+  if(val===_0xpass){
+    document.getElementById("lock").style.opacity="0";
+    setTimeout(()=>{ document.getElementById("lock").style.display="none"; },500);
+    document.getElementById("panel").style.display="block";
+  }else{
+    alert("كلمة السر غير صحيحة");
+  }
+}
+
+/* تعديل الصور */
+function _0ximg(el){ el.parentElement.querySelector("img").src = el.value; }
+/* تكبير الصور */
+function zoom(img){ document.querySelector("#zoomBox img").src = img.src; document.getElementById("zoomBox").style.display = "flex"; }
+</script>
+
+</body>
+</html>
